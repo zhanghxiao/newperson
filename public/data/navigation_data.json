@@ -1,0 +1,220 @@
+{
+  "cards": [
+    {
+      "id": 1,
+      "title": "智能翻译助手(new)",
+      "iconPath": "images/translate.png",
+      "description": "基于DeepLX和大语言模型的专业翻译工具，提供精准的多语言翻译服务，特别适合学术论文翻译，支持文件翻译并导出",
+      "url": "https://mistpe-translate.hf.space",
+      "category": "工具",
+      "tags": [
+        "效率",
+        "学习"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "智能文章补全编辑器",
+      "iconPath": "images/paperwriter.png",
+      "description": "这是一个智能补全编辑器，具体我暂时不知道咋描述，反正打开就能用",
+      "url": "https://write.aixiao.xyz/",
+      "category": "资源",
+      "tags": [
+        "效率",
+        "工具"
+      ]
+    },
+    {
+      "title": "引文范式智能转译系统",
+      "iconPath": "images/formatter.png",
+      "description": "关于引文范式智能转译系统，快速转换多种文献格式，支持多语言翻译，一键复制转换结果，方便",
+      "url": "https://formatter.aixiao.xyz/",
+      "category": "资源",
+      "tags": [
+        "效率",
+        "工具"
+      ],
+      "id": 3
+    },
+    {
+      "id": 4,
+      "title": "ChatGPT共享池（回归）",
+      "iconPath": "images/ChatGPT.png",
+      "description": "高效的ChatGPT账号共享平台，完美复刻ChatGPT官方界面的镜像站，提供稳定可靠的ChatGPT服务，支持多用户同时使用",
+      "url": "https://gpt.aixiao.xyz/admin/#/login-chatgpt",
+      "category": "资源",
+      "tags": [
+        "效率",
+        "工具"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "ChatGPT镜像站（回归）",
+      "iconPath": "images/ChatGPT.png",
+      "description": "完美复刻ChatGPT官方界面的镜像站，提供可靠的账号服务，轻松解决访问障碍",
+      "url": "https://gpt.aixiao.xyz/",
+      "category": "资源",
+      "tags": [
+        "工具",
+        "效率"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "X.AI智能问答优化平台",
+      "iconPath": "images/grok.ico",
+      "description": "基于Grok模型的智能对话平台，具有独特的幽默感和个性化回答能力",
+      "url": "https://mistpe-grok.hf.space",
+      "category": "工具",
+      "tags": [
+        "效率",
+        "娱乐"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Claude API智能助手",
+      "iconPath": "images/claude.webp",
+      "description": "专业的Claude API调用平台，提供高质量对话服务，适合紧急需求使用",
+      "url": "https://mistpe-Claude1.hf.space",
+      "category": "开发",
+      "tags": [
+        "工具",
+        "效率"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "ChatGPT API智能助手",
+      "iconPath": "images/ChatGPT.png",
+      "description": "基于ChatGPT API的轻量级对话平台，提供快速响应服务",
+      "url": "https://mistpe-webtalk.hf.space",
+      "category": "工具",
+      "tags": [
+        "效率",
+        "开发"
+      ]
+    },
+    {
+      "id": 9,
+      "title": "智能图表生成器",
+      "iconPath": "images/思维导图.webp",
+      "description": "AI驱动的多功能图表制作工具，支持思维导图、流程图、用例图等多种图表类型的自动生成",
+      "url": "https://mindmap.aixiao.xyz/",
+      "category": "工具",
+      "tags": [
+        "效率",
+        "设计"
+      ]
+    },
+    {
+      "id": 10,
+      "title": "学术文献搜索引擎",
+      "iconPath": "images/文献查找站.png",
+      "description": "专业的学术文献一站式搜索平台，为研究人员提供高效的文献检索服务",
+      "url": "https://www.ablesci.com/so",
+      "category": "学习",
+      "tags": [
+        "效率",
+        "资源"
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Stirling PDF全能工具箱",
+      "iconPath": "images/stirling.png",
+      "description": "强大的在线PDF处理工具，支持分割、合并、转换、压缩等多种功能，支持多语言界面",
+      "url": "https://stirlingpdf.io/",
+      "category": "工具",
+      "tags": [
+        "效率",
+        "开发"
+      ]
+    },
+    {
+      "id": 12,
+      "title": "在线PPT编辑器",
+      "iconPath": "images/PPTedit.png",
+      "description": "功能完善的在线PPT制作工具，提供专业的演示文稿编辑功能",
+      "url": "https://pptedit.aixiao.xyz",
+      "category": "工具",
+      "tags": [
+        "效率",
+        "设计"
+      ]
+    },
+    {
+      "id": 13,
+      "title": "SoundVerse(网抑云free)",
+      "iconPath": "images/soundverse.png",
+      "description": "接入网抑云API,纯纯free的听歌网站，也可以下载mp3格式的文件",
+      "url": "https://mistpe-soundverse.hf.space/",
+      "category": "资源",
+      "tags": [
+        "资源",
+        "娱乐"
+      ]
+    },
+    {
+      "id": 14,
+      "title": "AI内容创作平台",
+      "iconPath": "images/全能内容创建助手.ico",
+      "description": "全方位的智能内容创作助手，支持多平台文案创作、营销文案优化、职场写作等",
+      "url": "https://writer.aixiao.xyz/",
+      "category": "工具",
+      "tags": [
+        "效率",
+        "设计"
+      ]
+    },
+    {
+      "id": 15,
+      "title": "AI模型群聊平台",
+      "iconPath": "images/llmtalks.png",
+      "description": "创新的多模型对话平台，支持多个AI模型同时参与讨论，提供多角度的解答",
+      "url": "https://llmstalks.aixiao.xyz/",
+      "category": "工具",
+      "tags": [
+        "效率",
+        "娱乐"
+      ]
+    },
+    {
+      "id": 16,
+      "title": "AI语音合成工具",
+      "iconPath": "images/tts.webp",
+      "description": "便捷的文本转语音工具，提供快速的语音转换服务",
+      "url": "https://mistpe-edge.hf.space/",
+      "category": "工具",
+      "tags": [
+        "效率",
+        "开发"
+      ]
+    },
+    {
+      "id": 17,
+      "title": "PlantUML图表工具",
+      "iconPath": "images/plant.png",
+      "description": "专业的代码式图表绘制工具，支持多种图表类型的快速生成",
+      "url": "https://mistpe-plantuml.hf.space/",
+      "category": "开发",
+      "tags": [
+        "效率",
+        "设计"
+      ]
+    },
+    {
+      "id": 18,
+      "title": "Claude账号共享池（失效）",
+      "iconPath": "images/claude.webp",
+      "description": "高效的Claude账号共享平台，提供稳定可靠的Claude服务，支持多用户同时使用",
+      "url": "https://xiao1.aixiao.xyz/share/",
+      "category": "资源",
+      "tags": [
+        "效率",
+        "工具"
+      ]
+    }
+  ]
+}

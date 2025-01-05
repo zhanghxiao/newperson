@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIXShare Admin - 导航管理系统</title>
+    <style>
+        /* 使用与主站相同的变量定义 */
+        :root {
+            --light-gradient-start: #FF6B6B;
+            --light-gradient-end: #FFE66D;
+            --light-text-primary: #ffffff;
+            --light-card-background: rgba(255, 255, 255, 0.1);
+            --light-card-border: rgba(255, 255, 255, 0.6);
+            --light-shadow: rgba(0, 0, 0, 0.1);
+            --light-glow: rgba(255, 107, 107, 0.3);
+            
+            --dark-gradient-start: #1a1c2e;
+            --dark-gradient-end: #2d1b4b;
+            --dark-text-primary: #e0e0e0;
+            --dark-card-background: rgba(30, 32, 50, 0.35);
+            --dark-card-border: rgba(123, 47, 247, 0.6);
+            --dark-shadow: rgba(0, 0, 0, 0.25);
+            --dark-glow: rgba(123, 47, 247, 0.3);
+            
+            --nav-height: 60px;
+            --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --blur-effect: blur(10px);
+        }
+
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-gradient-start), var(--dark-gradient-end)) fixed;
+            min-height: 100vh;
+            color: var(--dark-text-primary);
+        }
+
+        /* 管理界面布局 */
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            background: var(--dark-card-background);
+            backdrop-filter: var(--blur-effect);
+            border-right: 1px solid var(--dark-card-border);
+            padding: 2rem 1rem;
+        }
+
+        .sidebar-header {
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .sidebar-logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px var(--dark-glow);
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            color: var(--dark-text-primary);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: var(--transition-normal);
+        }
+
+        .menu-link:hover {
+            background: rgba(123, 47, 247, 0.2);
+            transform: translateX(5px);
+        }
+
+        .menu-link.active {
+            background: rgba(123, 47, 247, 0.3);
+            border: 1px solid var(--dark-card-border);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            padding: 2rem;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 搜索框 */
+        .search-input {
+            width: 300px;
+            padding: 0.8rem;
+            background: rgba(123, 47, 247, 0.1);
+            border: 1px solid var(--dark-card-border);
+            border-radius: 8px;
+            color: var(--dark-text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(123, 47, 247, 0.6);
+            box-shadow: 0 0 15px var(--dark-glow);
+        }
+
+        /* 卡片管理表格 */
+        .card-table {
+            background: var(--dark-card-background);
+            backdrop-filter: var(--blur-effect);
+            border: 1px solid var(--dark-card-border);
+            border-radius: 15px;
+            overflow: hidden;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .card-table th,
+        .card-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--dark-card-border);
+        }
+
+        .card-table th {
+            background: rgba(123, 47, 247, 0.2);
+            font-weight: 600;
+        }
+
+        .card-table tr:hover {
+            background: rgba(123, 47, 247, 0.1);
+        }
+
+        .card-table tr {
+            cursor: move;
+        }
+
+        /* 操作按钮 */
+        .action-btn {
+            background: rgba(123, 47, 247, 0.2);
+            border: 1px solid var(--dark-card-border);
+            color: var(--dark-text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            margin-right: 0.5rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(123, 47, 247, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--dark-shadow),
+                        0 0 15px var(--dark-glow);
+        }
+
+        .add-btn {
+            margin-bottom: 1rem;
+            padding: 0.8rem 1.5rem;
+        }
+
+        /* 编辑表单 */
+        .edit-form {
+            background: var(--dark-card-background);
+            backdrop-filter: var(--blur-effect);
+            border: 1px solid var(--dark-card-border);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(123, 47, 247, 0.1);
+            border: 1px solid var(--dark-card-border);
+            border-radius: 8px;
+            color: var(--dark-text-primary);
+            transition: var(--transition-normal);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: rgba(123, 47, 247, 0.6);
+            box-shadow: 0 0 15px var(--dark-glow);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            background: rgba(123, 47, 247, 0.2);
+            border: 1px solid var(--dark-card-border);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remove-tag {
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--dark-text-primary);
+            padding: 0;
+            font-size: 1.2rem;
+        }
+
+        /* 退出按钮 */
+        .logout-btn {
+            background: rgba(255, 87, 87, 0.2);
+            border: 1px solid rgba(255, 87, 87, 0.3);
+            color: #ff5757;
+            margin-top: auto;
+            margin-bottom: 1rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 87, 87, 0.3);
+        }
+
+        /* 响应式调整 */
+        @media screen and (max-width: 768px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .card-table {
+                overflow-x: auto;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+        }
+
+        .dragging {
+            opacity: 0.5;
+            background: rgba(123, 47, 247, 0.1);
+        }
+
+        tr[draggable="true"] {
+            cursor: move;
+        }
+        .export-btn {
+            background: rgba(72, 187, 120, 0.2);
+            border: 1px solid rgba(72, 187, 120, 0.4);
+            color: var(--dark-text-primary);
+        }
+
+        .export-btn:hover {
+            background: rgba(72, 187, 120, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="images/dark-logo.svg" alt="Logo" class="sidebar-logo">
+                <h1 class="sidebar-title">AIXShare Admin</h1>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="#" class="menu-link active">导航卡片管理</a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">系统设置</a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">用户管理</a>
+                </li>
+            </ul>
+            <button class="action-btn logout-btn" onclick="handleLogout()">退出登录</button>
+        </aside>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <div class="content-header">
+                <h2 class="content-title">导航卡片管理</h2>
+                <div class="header-actions">
+                    <input type="text" class="search-input" placeholder="搜索卡片..." id="searchInput">
+                    <button class="action-btn add-btn" onclick="showAddForm()">添加新卡片</button>
+                    <!-- Add this new button -->
+                    <button class="action-btn export-btn" onclick="exportJSON()">导出JSON</button>
+                </div>
+            </div>
+            
+
+            <!-- 编辑表单 -->
+            <div id="editForm" class="edit-form" style="display: none;">
+                <form id="cardForm" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label class="form-label">标题</label>
+                        <input type="text" class="form-input" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">图标</label>
+                        <div class="icon-upload">
+                            <input type="text" class="form-input" name="iconPath" required>
+                            <input type="file" id="iconUpload" accept="image/*" style="display: none;">
+                            <button type="button" class="action-btn" onclick="document.getElementById('iconUpload').click()">
+                                上传图标
+                            </button>
+                        </div>
+                        <div class="preview-container"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">描述</label>
+                        <textarea class="form-textarea" name="description" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">URL</label>
+                        <input type="url" class="form-input" name="url" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">分类</label>
+                        <select class="form-select" name="category" required>
+                            <option value="工具">工具</option>
+                            <option value="资源">资源</option>
+                            <option value="设计">设计</option>
+                            <option value="开发">开发</option>
+                            <option value="学习">学习</option>
+                            <option value="效率">效率</option>
+                            <option value="娱乐">娱乐</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">标签</label>
+                        <div class="tag-input" id="tagInput">
+                            <input type="text" class="form-input" id="tagField" placeholder="输入标签后按回车">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="action-btn">保存</button>
+                        <button type="button" class="action-btn" onclick="hideEditForm()">取消</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 卡片列表 -->
+            <div class="table-container">
+                <table class="card-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>图标</th>
+                            <th>标题</th>
+                            <th>分类</th>
+                            <th>标签</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cardTableBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+// 全局变量定义
+let cards = [];
+let currentEditId = null;
+let tags = [];
+
+// 身份验证相关函数
+async function checkAuth() {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+        window.location.href = '/login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/verify-token', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('认证失败');
+        }
+
+        const data = await response.json();
+        if (!data.valid) {
+            throw new Error('无效的令牌');
+        }
+    } catch (error) {
+        console.error('认证错误:', error);
+        localStorage.removeItem('adminToken');
+        window.location.href = '/login.html';
+    }
+}
+
+function handleLogout() {
+    localStorage.removeItem('adminToken');
+    window.location.href = '/login.html';
+}
+
+// 数据初始化和渲染
+async function initializeData() {
+    try {
+        const response = await fetch('/api/cards');
+        const data = await response.json();
+        cards = data.cards;
+        renderTable();
+    } catch (error) {
+        console.error('加载数据失败:', error);
+    }
+}
+
+function renderTable() {
+    const tbody = document.getElementById('cardTableBody');
+    tbody.innerHTML = cards.map(card => `
+        <tr draggable="true" data-id="${card.id}">
+            <td>${card.id}</td>
+            <td>
+                <img src="${card.iconPath}" alt="${card.title}" 
+                     style="width: 32px; height: 32px; border-radius: 6px;">
+            </td>
+            <td>${card.title}</td>
+            <td>${card.category}</td>
+            <td>${card.tags.join(', ')}</td>
+            <td>
+                <button class="action-btn" onclick="editCard(${card.id})">编辑</button>
+                <button class="action-btn" onclick="deleteCard(${card.id})">删除</button>
+            </td>
+        </tr>
+    `).join('');
+    
+    setupDragAndDrop();
+}
+
+// 表单处理函数
+function showAddForm() {
+    currentEditId = null;
+    const form = document.getElementById('cardForm');
+    form.reset();
+    tags = [];
+    document.getElementById('editForm').style.display = 'block';
+    document.querySelector('.preview-container').innerHTML = '';
+    renderTags();
+}
+
+function hideEditForm() {
+    document.getElementById('editForm').style.display = 'none';
+    currentEditId = null;
+}
+
+async function handleSubmit(event) {
+    event.preventDefault();
+    const token = localStorage.getItem('adminToken');
+    const form = event.target;
+    
+    const cardData = {
+        title: form.title.value,
+        iconPath: form.iconPath.value,
+        description: form.description.value,
+        url: form.url.value,
+        category: form.category.value,
+        tags: tags
+    };
+
+    try {
+        const url = currentEditId 
+            ? `/api/cards/${currentEditId}`
+            : '/api/cards';
+            
+        const method = currentEditId ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(cardData)
+        });
+
+        if (!response.ok) {
+            throw new Error('操作失败');
+        }
+
+        await initializeData();
+        hideEditForm();
+    } catch (error) {
+        console.error('卡片操作失败:', error);
+        alert('操作失败，请重试');
+    }
+}
+
+// 卡片操作函数
+async function editCard(id) {
+    try {
+        const card = cards.find(c => c.id === id);
+        if (!card) {
+            throw new Error('卡片不存在');
+        }
+
+        currentEditId = id;
+        const form = document.getElementById('cardForm');
+        form.title.value = card.title;
+        form.iconPath.value = card.iconPath;
+        form.description.value = card.description;
+        form.url.value = card.url;
+        form.category.value = card.category;
+        
+        tags = [...card.tags];
+        document.getElementById('editForm').style.display = 'block';
+        renderTags();
+        updateCardPreview();
+    } catch (error) {
+        console.error('加载卡片失败:', error);
+        alert('加载卡片失败，请重试');
+    }
+}
+
+async function deleteCard(id) {
+    if (!confirm('确定要删除这个卡片吗？')) {
+        return;
+    }
+
+    const token = localStorage.getItem('adminToken');
+    try {
+        const response = await fetch(`/api/cards/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('删除失败');
+        }
+
+        await initializeData();
+    } catch (error) {
+        console.error('删除卡片失败:', error);
+        alert('删除失败，请重试');
+    }
+}
+
+// 图片上传和预览
+function updateCardPreview() {
+    const form = document.getElementById('cardForm');
+    const previewContainer = document.querySelector('.preview-container');
+    
+    if (form.iconPath.value) {
+        previewContainer.innerHTML = `
+            <div style="margin-top: 1rem;">
+                <img src="${form.iconPath.value}" alt="Icon Preview" 
+                     style="width: 48px; height: 48px; border-radius: 10px; 
+                            border: 1px solid var(--dark-card-border);">
+            </div>
+        `;
+    } else {
+        previewContainer.innerHTML = '';
+    }
+}
+
+async function handleImageUpload(file) {
+    const token = localStorage.getItem('adminToken');
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        const iconInput = document.querySelector('input[name="iconPath"]');
+        iconInput.disabled = true;
+        iconInput.value = '上传中...';
+
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('上传失败: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        iconInput.value = data.url;
+        iconInput.disabled = false;
+        updateCardPreview();
+    } catch (error) {
+        console.error('上传失败:', error);
+        alert('图片上传失败: ' + error.message);
+        document.querySelector('input[name="iconPath"]').value = '';
+        document.querySelector('input[name="iconPath"]').disabled = false;
+    }
+}
+
+// 标签管理
+function renderTags() {
+    const tagInput = document.getElementById('tagInput');
+    const tagField = document.getElementById('tagField');
+    
+    Array.from(tagInput.children).forEach(child => {
+        if (child !== tagField) {
+            child.remove();
+        }
+    });
+    
+    tags.forEach(tag => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.innerHTML = `
+            ${tag}
+            <button type="button" class="remove-tag" onclick="removeTag('${tag}')">×</button>
+        `;
+        tagInput.insertBefore(tagElement, tagField);
+    });
+}
+
+function removeTag(tag) {
+    tags = tags.filter(t => t !== tag);
+    renderTags();
+}
+
+// 拖拽排序功能
+function setupDragAndDrop() {
+    const tbody = document.getElementById('cardTableBody');
+    const rows = tbody.getElementsByTagName('tr');
+
+    Array.from(rows).forEach(row => {
+        row.addEventListener('dragstart', handleDragStart);
+        row.addEventListener('dragover', handleDragOver);
+        row.addEventListener('drop', handleDrop);
+        row.addEventListener('dragend', handleDragEnd);
+    });
+}
+
+function handleDragStart(e) {
+    this.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', e.target.dataset.id);
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    const draggingRow = document.querySelector('.dragging');
+    if (draggingRow && draggingRow !== this) {
+        const rect = this.getBoundingClientRect();
+        const mid = (rect.top + rect.bottom) / 2;
+        if (e.clientY < mid) {
+            this.parentNode.insertBefore(draggingRow, this);
+        } else {
+            this.parentNode.insertBefore(draggingRow, this.nextSibling);
+        }
+    }
+}
+
+async function handleDrop(e) {
+    e.preventDefault();
+    const rows = Array.from(document.getElementById('cardTableBody').querySelectorAll('tr'));
+    const order = rows.map(row => parseInt(row.dataset.id));
+    
+    const token = localStorage.getItem('adminToken');
+    try {
+        const response = await fetch('/api/cards/reorder', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ order })
+        });
+
+        if (!response.ok) {
+            throw new Error('保存排序失败');
+        }
+    } catch (error) {
+        console.error('保存排序失败:', error);
+        await initializeData();
+    }
+}
+
+function handleDragEnd() {
+    this.classList.remove('dragging');
+}
+
+// 初始化执行
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    initializeData();
+    
+    // 设置表单事件监听
+    document.getElementById('cardForm').addEventListener('submit', handleSubmit);
+    document.getElementById('iconUpload').addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            handleImageUpload(this.files[0]);
+        }
+    });
+
+    // 设置标签输入
+    document.getElementById('tagField').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const tag = this.value.trim();
+            if (tag && !tags.includes(tag)) {
+                tags.push(tag);
+                this.value = '';
+                renderTags();
+            }
+        }
+    });
+
+    // 设置搜索功能
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = this.value.toLowerCase();
+        const filteredCards = cards.filter(card => 
+            card.title.toLowerCase().includes(searchTerm) ||
+            card.description.toLowerCase().includes(searchTerm) ||
+            card.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+        );
+        renderFilteredCards(filteredCards);
+    });
+});
+function exportJSON() {
+    try {
+        // Create a formatted JSON string
+        const jsonData = JSON.stringify({ cards: cards }, null, 2);
+        
+        // Create a Blob containing the JSON data
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        
+        // Create a download link
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        
+        // Generate timestamp for filename
+        const date = new Date();
+        const timestamp = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
+        
+        // Set filename with timestamp
+        link.download = `navigation_data_${timestamp}.json`;
+        
+        // Append link to body, click it, and remove it
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up the URL object
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('导出失败:', error);
+        alert('导出JSON失败，请重试');
+    }
+}
+    </script>
+</body>
+</html>
