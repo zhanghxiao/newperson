@@ -71,7 +71,7 @@ app.use(express.static('public'));
 // 身份验证中间件
 const authenticateToken = (req, res, next) => {
     try {
-        const authHeader = req.headers['Authorization1'];
+        const authHeader = req.headers['Authorization'];
         if (!authHeader) {
             return res.status(401).json({ error: '未提供认证令牌' });
         }

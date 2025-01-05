@@ -439,7 +439,7 @@ async function checkAuth() {
         const response = await fetch('/api/verify-token', {
             method: 'POST',
             headers: {
-                'Authorization1': `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -539,7 +539,7 @@ async function handleSubmit(event) {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization1': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(cardData)
         });
@@ -592,7 +592,7 @@ async function deleteCard(id) {
         const response = await fetch(`/api/cards/${id}`, {
             method: 'DELETE',
             headers: {
-                'Authorization1': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
             }
         });
 
@@ -638,7 +638,7 @@ async function handleImageUpload(file) {
         const response = await fetch('/api/upload', {
             method: 'POST',
             headers: {
-                'Authorization1': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
             },
             body: formData
         });
@@ -728,7 +728,7 @@ async function handleDrop(e) {
         const response = await fetch('/api/cards/reorder', {
             method: 'POST',
             headers: {
-                'Authorization1': `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ order })
