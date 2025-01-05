@@ -1572,10 +1572,11 @@ body.dark-theme ::selection {
     <img src="images/light-logo.svg" alt="Logo" class="theme-logo">
     <span>AIXShare</span>
 </a>
-        <div class="nav-links">
+        <!-- <div class="nav-links">
             <a href="#" class="nav-link">首页</a>
             <a href="#" class="nav-link">导航</a>
             <a href="#" class="nav-link">关于</a>
+            <a href="#" class="nav-link">更新</a>
             <a href="#" class="nav-link" id="adminLink">管理</a>
         </div>
         <div class="nav-tools">
@@ -1601,6 +1602,39 @@ function checkAdminStatus() {
 document.addEventListener('DOMContentLoaded', () => {
     checkAdminStatus();
 });
+    </script> -->
+    <div class="nav-links">
+        <a href="#" class="nav-link">首页</a>
+        <a href="#" class="nav-link">导航</a>
+        <a href="#" class="nav-link">关于</a>
+        <a href="#" class="nav-link">更新</a>
+        <a href="#" class="nav-link" id="adminLink">管理</a>
+    </div>
+    <div class="nav-tools">
+        <button class="theme-toggle" aria-label="切换主题">🌙</button>
+    </div>
+    </nav>
+    <script>
+    // 检查管理员登录状态并设置管理入口行为
+    function checkAdminStatus() {
+        const adminUsername = localStorage.getItem('adminUsername');
+        const adminPassword = localStorage.getItem('adminPassword');
+        const adminLink = document.getElementById('adminLink');
+        
+        adminLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (adminUsername && adminPassword) {
+                window.location.href = '/admin.html';
+            } else {
+                window.location.href = '/login.html';
+            }
+        });
+    }
+    
+    // 在页面加载时初始化管理入口
+    document.addEventListener('DOMContentLoaded', () => {
+        checkAdminStatus();
+    });
     </script>
 
     <!-- 头部区域 -->

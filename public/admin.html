@@ -421,7 +421,7 @@
         </main>
     </div>
 
-    <script>
+    <!-- <script>
 // 全局变量定义
 let cards = [];
 let currentEditId = null;
@@ -816,6 +816,398 @@ function exportJSON() {
         alert('导出JSON失败，请重试');
     }
 }
-    </script>
+    </script> -->
+    <script>
+        // 全局变量定义
+        let cards = [];
+        let currentEditId = null;
+        let tags = [];
+        
+        // 身份验证相关函数
+        async function checkAuth() {
+            const username = localStorage.getItem('adminUsername');
+            const password = localStorage.getItem('adminPassword');
+            
+            if (!username || !password) {
+                window.location.href = '/login.html';
+                return;
+            }
+        
+            try {
+                const response = await fetch('/api/cards', {
+                    headers: {
+                        'username': username,
+                        'password': password
+                    }
+                });
+        
+                if (!response.ok) {
+                    throw new Error('认证失败');
+                }
+            } catch (error) {
+                console.error('认证错误:', error);
+                localStorage.removeItem('adminUsername');
+                localStorage.removeItem('adminPassword');
+                window.location.href = '/login.html';
+            }
+        }
+        
+        function handleLogout() {
+            localStorage.removeItem('adminUsername');
+            localStorage.removeItem('adminPassword');
+            window.location.href = '/login.html';
+        }
+        
+        // 认证请求包装函数
+        async function authenticatedFetch(url, options = {}) {
+            const username = localStorage.getItem('adminUsername');
+            const password = localStorage.getItem('adminPassword');
+            
+            return fetch(url, {
+                ...options,
+                headers: {
+                    ...options.headers,
+                    'username': username,
+                    'password': password
+                }
+            });
+        }
+        
+        // 数据初始化和渲染
+        async function initializeData() {
+            try {
+                const response = await authenticatedFetch('/api/cards');
+                const data = await response.json();
+                cards = data.cards;
+                renderTable();
+            } catch (error) {
+                console.error('加载数据失败:', error);
+            }
+        }
+        
+        // 渲染表格
+        function renderTable() {
+            const tbody = document.getElementById('cardTableBody');
+            tbody.innerHTML = cards.map(card => `
+                <tr draggable="true" data-id="${card.id}">
+                    <td>${card.id}</td>
+                    <td>
+                        <img src="${card.iconPath}" alt="${card.title}" 
+                             style="width: 32px; height: 32px; border-radius: 6px;">
+                    </td>
+                    <td>${card.title}</td>
+                    <td>${card.category}</td>
+                    <td>${card.tags.join(', ')}</td>
+                    <td>
+                        <button class="action-btn" onclick="editCard(${card.id})">编辑</button>
+                        <button class="action-btn" onclick="deleteCard(${card.id})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            setupDragAndDrop();
+        }
+        
+        // 卡片操作函数
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            
+            const cardData = {
+                title: form.title.value,
+                iconPath: form.iconPath.value,
+                description: form.description.value,
+                url: form.url.value,
+                category: form.category.value,
+                tags: tags
+            };
+        
+            try {
+                const url = currentEditId 
+                    ? `/api/cards/${currentEditId}`
+                    : '/api/cards';
+                    
+                const method = currentEditId ? 'PUT' : 'POST';
+                
+                const response = await authenticatedFetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(cardData)
+                });
+        
+                if (!response.ok) {
+                    throw new Error('操作失败');
+                }
+        
+                await initializeData();
+                hideEditForm();
+            } catch (error) {
+                console.error('卡片操作失败:', error);
+                alert('操作失败，请重试');
+            }
+        }
+        
+        async function deleteCard(id) {
+    if (!confirm('确定要删除这个卡片吗？')) {
+        return;
+    }
+
+    try {
+        const response = await authenticatedFetch(`/api/cards/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error('删除失败');
+        }
+
+        await initializeData();
+    } catch (error) {
+        console.error('删除卡片失败:', error);
+        alert('删除失败，请重试');
+    }
+}
+
+async function editCard(id) {
+    try {
+        const card = cards.find(c => c.id === id);
+        if (!card) {
+            throw new Error('卡片不存在');
+        }
+
+        currentEditId = id;
+        const form = document.getElementById('cardForm');
+        form.title.value = card.title;
+        form.iconPath.value = card.iconPath;
+        form.description.value = card.description;
+        form.url.value = card.url;
+        form.category.value = card.category;
+        
+        tags = [...card.tags];
+        document.getElementById('editForm').style.display = 'block';
+        renderTags();
+        updateCardPreview();
+    } catch (error) {
+        console.error('加载卡片失败:', error);
+        alert('加载卡片失败，请重试');
+    }
+}
+
+// 图片上传和预览函数
+async function handleImageUpload(file) {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        const iconInput = document.querySelector('input[name="iconPath"]');
+        iconInput.disabled = true;
+        iconInput.value = '上传中...';
+
+        const response = await authenticatedFetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('上传失败: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        iconInput.value = data.url;
+        iconInput.disabled = false;
+        updateCardPreview();
+    } catch (error) {
+        console.error('上传失败:', error);
+        alert('图片上传失败: ' + error.message);
+        iconInput.value = '';
+        iconInput.disabled = false;
+    }
+}
+
+function updateCardPreview() {
+    const form = document.getElementById('cardForm');
+    const previewContainer = document.querySelector('.preview-container');
+    
+    if (form.iconPath.value) {
+        previewContainer.innerHTML = `
+            <div style="margin-top: 1rem;">
+                <img src="${form.iconPath.value}" alt="Icon Preview" 
+                     style="width: 48px; height: 48px; border-radius: 10px; 
+                            border: 1px solid var(--dark-card-border);">
+            </div>
+        `;
+    } else {
+        previewContainer.innerHTML = '';
+    }
+}
+
+// 拖拽排序功能
+function setupDragAndDrop() {
+    const tbody = document.getElementById('cardTableBody');
+    const rows = tbody.getElementsByTagName('tr');
+
+    Array.from(rows).forEach(row => {
+        row.addEventListener('dragstart', handleDragStart);
+        row.addEventListener('dragover', handleDragOver);
+        row.addEventListener('drop', handleDrop);
+        row.addEventListener('dragend', handleDragEnd);
+    });
+}
+
+function handleDragStart(e) {
+    this.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', this.dataset.id);
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    const draggingRow = document.querySelector('.dragging');
+    if (draggingRow && draggingRow !== this) {
+        const rect = this.getBoundingClientRect();
+        const mid = (rect.top + rect.bottom) / 2;
+        if (e.clientY < mid) {
+            this.parentNode.insertBefore(draggingRow, this);
+        } else {
+            this.parentNode.insertBefore(draggingRow, this.nextSibling);
+        }
+    }
+}
+
+async function handleDrop(e) {
+    e.preventDefault();
+    const rows = Array.from(document.getElementById('cardTableBody').querySelectorAll('tr'));
+    const order = rows.map(row => parseInt(row.dataset.id));
+    
+    try {
+        const response = await authenticatedFetch('/api/cards/reorder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ order })
+        });
+
+        if (!response.ok) {
+            throw new Error('保存排序失败');
+        }
+    } catch (error) {
+        console.error('保存排序失败:', error);
+        await initializeData();
+    }
+}
+
+function handleDragEnd() {
+    this.classList.remove('dragging');
+}
+
+// 表单和标签管理
+function showAddForm() {
+    currentEditId = null;
+    const form = document.getElementById('cardForm');
+    form.reset();
+    tags = [];
+    document.getElementById('editForm').style.display = 'block';
+    document.querySelector('.preview-container').innerHTML = '';
+    renderTags();
+}
+
+function hideEditForm() {
+    document.getElementById('editForm').style.display = 'none';
+    currentEditId = null;
+}
+
+function renderTags() {
+    const tagInput = document.getElementById('tagInput');
+    const tagField = document.getElementById('tagField');
+    
+    Array.from(tagInput.children).forEach(child => {
+        if (child !== tagField) {
+            child.remove();
+        }
+    });
+    
+    tags.forEach(tag => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.innerHTML = `
+            ${tag}
+            <button type="button" class="remove-tag" onclick="removeTag('${tag}')">×</button>
+        `;
+        tagInput.insertBefore(tagElement, tagField);
+    });
+}
+
+function removeTag(tag) {
+    tags = tags.filter(t => t !== tag);
+    renderTags();
+}
+
+// 搜索功能
+function initializeSearch() {
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = this.value.toLowerCase();
+        const filteredCards = cards.filter(card => 
+            card.title.toLowerCase().includes(searchTerm) ||
+            card.description.toLowerCase().includes(searchTerm) ||
+            card.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+        );
+        renderTable(filteredCards);
+    });
+}
+
+// JSON导出功能
+function exportJSON() {
+    try {
+        const jsonData = JSON.stringify({ cards: cards }, null, 2);
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        
+        const date = new Date();
+        const timestamp = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
+        
+        link.download = `navigation_data_${timestamp}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('导出失败:', error);
+        alert('导出JSON失败，请重试');
+    }
+}
+
+// 初始化执行
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    initializeData();
+    
+    // 设置表单事件监听
+    document.getElementById('cardForm').addEventListener('submit', handleSubmit);
+    document.getElementById('iconUpload').addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            handleImageUpload(this.files[0]);
+        }
+    });
+
+    // 设置标签输入
+    document.getElementById('tagField').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const tag = this.value.trim();
+            if (tag && !tags.includes(tag)) {
+                tags.push(tag);
+                this.value = '';
+                renderTags();
+            }
+        }
+    });
+
+    initializeSearch();
+});
+</script>
 </body>
 </html>
