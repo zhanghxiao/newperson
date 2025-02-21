@@ -11,41 +11,73 @@
       ],
       "id": 1
     },
-     {
-      "id": 2,
+    {
       "title": "智能文章补全编辑器",
-      "iconPath": "images/paperwriter.png",
+      "iconPath": "/images/upload-1739871054114-144536571.jpg",
       "description": "这是一个智能补全编辑器，具体我暂时不知道咋描述，反正打开就能用",
       "url": "https://write.aixiao.xyz/",
       "category": "资源",
       "tags": [
         "效率",
         "工具"
-      ]
+      ],
+      "id": 2
     },
     {
-      "title": "Claude-3-5-sonnet（站长推荐）",
+      "title": "Claude-3-5-haiku",
       "iconPath": "images/claude.webp",
+      "description": "专业的Claude API调用平台，提供高质量对话服务，适合紧急需求使用",
+      "url": "https://mistpe-Claude2.hf.space",
+      "category": "工具",
+      "tags": [
+        "免费"
+      ],
+      "id": 28
+    },
+    {
+      "title": "Claude-3-5-sonnet",
+      "iconPath": "/images/upload-1739875794306-857490003.png",
       "description": "专业的Claude API调用平台，提供高质量对话服务，适合紧急需求使用",
       "url": "https://mistpe-Claude1.hf.space",
       "category": "开发",
       "tags": [
-        "工具",
-        "效率"
+        "VIP"
       ],
       "id": 3
     },
     {
-      "title": "ChatGPT (o3/o1-mini)站长推荐",
+      "title": "gpt-4o-mini",
       "iconPath": "images/ChatGPT.png",
       "description": "基于ChatGPT API的轻量级对话平台，提供快速响应服务",
+      "url": "https://mistpe-webtalk1.hf.space",
+      "category": "工具",
+      "tags": [
+        "免费"
+      ],
+      "id": 6
+    },
+    {
+      "title": "ChatGPT（o3/o1-mini)",
+      "iconPath": "/images/upload-1739875882166-630068585.png",
+      "description": "基于ChatGPT API的轻量级对话平台，提供快速响应服务，想用给老子付费，不知道哪个王八蛋在薅羊毛，真当公益站是散财童子吗？",
       "url": "https://mistpe-webtalk.hf.space",
+      "category": "工具",
+      "tags": [
+        "VIP"
+      ],
+      "id": 4
+    },
+    {
+      "title": "DeepSeek (R1/V3/R1-70B)",
+      "iconPath": "/images/upload-1738589716218-759124081.png",
+      "description": "DeepSeek官网api站，可以在这里使用DeepSeek官网的模型",
+      "url": "https://mistpe-dk.hf.space",
       "category": "工具",
       "tags": [
         "效率",
         "开发"
       ],
-      "id": 4
+      "id": 7
     },
     {
       "title": "DeepSeek R1 70b（推荐）",
@@ -60,31 +92,7 @@
       "id": 5
     },
     {
-      "title": "ChatGPT (o3/o1-mini)备用",
-      "iconPath": "images/ChatGPT.png",
-      "description": "基于ChatGPT API的轻量级对话平台，提供快速响应服务",
-      "url": "https://mistpe-webtalk1.hf.space",
-      "category": "工具",
-      "tags": [
-        "效率",
-        "开发"
-      ],
-      "id": 6
-    },
-    {
-      "title": "DeepSeek R1(官网等服务器维修)",
-      "iconPath": "/images/upload-1738589716218-759124081.png",
-      "description": "DeepSeek官网api站，可以在这里使用DeepSeek官网的模型",
-      "url": "https://mistpe-dk.hf.space",
-      "category": "工具",
-      "tags": [
-        "效率",
-        "开发"
-      ],
-      "id": 7
-    },
-    {
-      "title": "Grok2（马斯克那个）推荐",
+      "title": "Grok3（马斯克那个）推荐",
       "iconPath": "images/grok.ico",
       "description": "基于Grok模型的智能对话平台，具有独特的幽默感和个性化回答能力",
       "url": "https://mistpe-grok.hf.space",
@@ -164,7 +172,7 @@
       ],
       "id": 14
     },
-   {
+    {
       "title": "NewsNow",
       "iconPath": "/images/upload-1736174341090-481528135.png",
       "description": "优雅阅读实时最热门新闻，其实就是多个APP的瓜一起吃",
